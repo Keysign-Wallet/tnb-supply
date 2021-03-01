@@ -54,18 +54,34 @@ global_coin_supply = coins_supply()
 
 print(f"Total coins in circulation: {global_coin_supply}")
 
-# returns the list of all core team members
-def core_team_account_number_list():
-    team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/teams.csv'
 
+# returns the list of all members
+def account_number_list(team):
+    team_url = ''
+    account_number_position = 0
+    file_name = ''
+    if team == 'team':
+        file_name = 'data_files/teams.csv'
+        team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/teams.csv'
+        account_number_position = 10
+    elif team == 'project':
+        file_name = 'data_files/project-teams.csv'
+        account_number_position = 10
+        team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Project-Proposals/master/CSVs/project-teams.csv'
+    elif team == 'contributor':
+        file_name = 'data_files/contributors.csv'
+        account_number_position = 2
+        team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/contributors.csv'
+    else:
+        Exception("This is not good brruuhh")
     team_data = requests.get(team_url).text
 
     contributor_account_number_list = []
 
-    with open('data_files/contributors.csv', 'w') as file:
+    with open(file_name, 'w') as file:
         file.write(team_data)
 
-    with open('data_files/contributors.csv', 'r') as file:
+    with open(file_name, 'r') as file:
         reader = csv.reader(file)
 
         line_count = 0
@@ -73,8 +89,8 @@ def core_team_account_number_list():
             if line_count == 0:
                 line_count += 1
             else:
-                if len(row[10]) == VERIFY_KEY_LENGTH:
-                    contributor_account_number_list.append(row[10])
+                if len(row[account_number_position]) == VERIFY_KEY_LENGTH:
+                    contributor_account_number_list.append(row[account_number_position])
 
     return contributor_account_number_list
 
@@ -84,7 +100,7 @@ def core_team():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = core_team_account_number_list()
+    contributor_account_number_list = account_number_list('team')
 
     for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
@@ -95,37 +111,12 @@ def core_team():
      str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
-# returns the list of all project team members
-def project_team_account_number_list():
-    team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Project-Proposals/master/CSVs/project-teams.csv'
-
-    team_data = requests.get(team_url).text
-
-    contributor_account_number_list = []
-
-    with open('data_files/contributors.csv', 'w') as file:
-        file.write(team_data)
-
-    with open('data_files/contributors.csv', 'r') as file:
-        reader = csv.reader(file)
-
-        line_count = 0
-        for row in reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                if len(row[10]) == VERIFY_KEY_LENGTH:
-                    contributor_account_number_list.append(row[10])
-
-    return contributor_account_number_list
-
-
 # Returns total balance of the project team members of thenewboston 
 def project_team():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = project_team_account_number_list()
+    contributor_account_number_list = account_number_list('project')
 
     for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
@@ -136,37 +127,12 @@ def project_team():
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
-
-# returns the account number of all the contributors
-def all_contributor_account_number_list():
-    team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/contributors.csv'
-
-    team_data = requests.get(team_url).text
-
-    contributor_account_number_list = []
-
-    with open('data_files/contributors.csv', 'w') as file:
-        file.write(team_data)
-
-    with open('data_files/contributors.csv', 'r') as file:
-        reader = csv.reader(file)
-
-        line_count = 0
-        for row in reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-                if len(row[2]) == VERIFY_KEY_LENGTH:
-                    contributor_account_number_list.append(row[2])
-    return contributor_account_number_list
-
-
 # Returns total balance of the all the contributors of thenewboston 
 def all_contributors():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = all_contributor_account_number_list()
+    contributor_account_number_list = account_number_list('contributor')
 
     for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
@@ -174,7 +140,7 @@ def all_contributors():
                 total_coins_supplied += int(account['balance'])
 
     print("Total coins with all the contributors: " + str(total_coins_supplied)+ " | " + \
-    str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
+    str(int((total_coins_supplied/global_coin_supply)*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -183,7 +149,7 @@ def contributors_not_in_team():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = all_contributor_account_number_list()
+    contributor_account_number_list = account_number_list('team') + account_number_list('project')
 
     for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
@@ -200,7 +166,7 @@ def normal_wallets():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = all_contributor_account_number_list()
+    contributor_account_number_list = account_number_list('contributor') + account_number_list('team') + account_number_list('project')
 
     for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
