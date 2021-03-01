@@ -39,6 +39,21 @@ def fetch_account_data():
 
     return results
 
+account_data_results = fetch_account_data()
+
+# returns the total supply of coin
+def coins_supply():
+    total_coins_supplied = 0
+
+    for account in account_data_results:
+        if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
+            total_coins_supplied += int(account['balance'])
+    return total_coins_supplied
+
+global_coin_supply = coins_supply()
+
+print(f"Total coins in circulation: {global_coin_supply}")
+
 # returns the list of all core team members
 def core_team_account_number_list():
     team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/teams.csv'
@@ -69,16 +84,15 @@ def core_team():
 
     total_coins_supplied = 0
 
-    data = fetch_account_data()
-
     contributor_account_number_list = core_team_account_number_list()
 
-    for account in data:
+    for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("Total coins in core team: " + str(total_coins_supplied))
+    print("Total coins with core team: " + str(total_coins_supplied) + " | " + \
+     str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
     return total_coins_supplied
 
 # returns the list of all project team members
@@ -110,17 +124,16 @@ def project_team_account_number_list():
 def project_team():
 
     total_coins_supplied = 0
-    
-    data = fetch_account_data()
 
     contributor_account_number_list = project_team_account_number_list()
 
-    for account in data:
+    for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
         
-    print("Total coins with project teams: " + str(total_coins_supplied))
+    print("Total coins with project teams: " + str(total_coins_supplied) + " | " + \
+    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -152,17 +165,16 @@ def all_contributor_account_number_list():
 def all_contributors():
 
     total_coins_supplied = 0
-    
-    data = fetch_account_data()
 
     contributor_account_number_list = all_contributor_account_number_list()
 
-    for account in data:
+    for account in account_data_results:
         if str(account['account_number']) in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("Total coins with all the contributors: " + str(total_coins_supplied))
+    print("Total coins with all the contributors: " + str(total_coins_supplied)+ " | " + \
+    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -171,16 +183,15 @@ def contributors_not_in_team():
 
     total_coins_supplied = 0
 
-    data = fetch_account_data()
-
     contributor_account_number_list = all_contributor_account_number_list()
 
-    for account in data:
+    for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("Total coins with contributors that are not part of team: " + str(total_coins_supplied))
+    print("Total coins with contributors that are not part of team: " + str(total_coins_supplied)+ " | " + \
+    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -190,30 +201,15 @@ def normal_wallets():
     total_coins_supplied = 0
 
     contributor_account_number_list = all_contributor_account_number_list()
-    
-    data = fetch_account_data()
 
-    for account in data:
+    for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("total coins in normal wallets: " + str(total_coins_supplied))
+    print("total coins in normal wallets: " + str(total_coins_supplied)+ " | " + \
+    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
     return total_coins_supplied
-
-
-# returns the total supply of coin
-def coins_supply():
-    total_coins_supplied = 0
-    
-    data = fetch_account_data()
-
-    for account in data:
-        if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
-            total_coins_supplied += int(account['balance'])
-    print("total supply of coin: " + str(total_coins_supplied))
-    return total_coins_supplied
-
 
 coins_supply()              # Returns the supply of the coin
 core_team()                 # Returns total balance of the core team of thenewboston
