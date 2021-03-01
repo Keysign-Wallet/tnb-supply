@@ -92,7 +92,7 @@ def core_team():
                 total_coins_supplied += int(account['balance'])
 
     print("Total coins with core team: " + str(total_coins_supplied) + " | " + \
-     str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
+     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 # returns the list of all project team members
@@ -133,7 +133,7 @@ def project_team():
                 total_coins_supplied += int(account['balance'])
         
     print("Total coins with project teams: " + str(total_coins_supplied) + " | " + \
-    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
+    str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -174,7 +174,7 @@ def all_contributors():
                 total_coins_supplied += int(account['balance'])
 
     print("Total coins with all the contributors: " + str(total_coins_supplied)+ " | " + \
-    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
+    str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -191,7 +191,7 @@ def contributors_not_in_team():
                 total_coins_supplied += int(account['balance'])
 
     print("Total coins with contributors that are not part of team: " + str(total_coins_supplied)+ " | " + \
-    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
+    str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 
@@ -208,7 +208,7 @@ def normal_wallets():
                 total_coins_supplied += int(account['balance'])
 
     print("total coins in normal wallets: " + str(total_coins_supplied)+ " | " + \
-    str(total_coins_supplied/global_coin_supply*100) + "% of total supply")
+    str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
 coins_supply()              # Returns the supply of the coin
