@@ -4,7 +4,7 @@ import csv
 from thenewboston.constants.network import MAX_POINT_VALUE, VERIFY_KEY_LENGTH
 from thenewboston.utils.network import fetch
 
-PRIMARY_VALIDATOR_IP = '157.230.75.212'
+PRIMARY_VALIDATOR_IP = '54.183.16.194'
 
 ACCOUNTS_TO_SKIP = [
     "23676c35fce177aef2412e3ab12d22bf521ed423c6f55b8922c336500a1a27c5", # TREASURY (new)
@@ -51,9 +51,6 @@ def coins_supply():
     return total_coins_supplied
 
 global_coin_supply = coins_supply()
-
-print(f"Total coins in circulation: {global_coin_supply}")
-
 
 # returns the list of all members
 def account_number_list(team):
@@ -127,19 +124,19 @@ def project_team():
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
-# Returns total balance of the all the contributors of thenewboston 
-def all_contributors():
+# Returns total balance not in core team
+def not_in_core_team():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = account_number_list('contributor')
+    contributor_account_number_list = account_number_list('team')
 
     for account in account_data_results:
-        if str(account['account_number']) in contributor_account_number_list:
+        if str(account['account_number']) not in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("Total coins with all the contributors: " + str(total_coins_supplied)+ " | " + \
+    print("Total coins in all normal wallets: " + str(total_coins_supplied)+ " | " + \
     str(int((total_coins_supplied/global_coin_supply)*10000)/100) + "% of total supply")
     return total_coins_supplied
 
@@ -149,14 +146,17 @@ def contributors_not_in_team():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = account_number_list('team') + account_number_list('project')
+    team_project_account_number_list = account_number_list('team') + account_number_list('project')
+
+    contributor_account_number_list = account_number_list('contributor')
 
     for account in account_data_results:
-        if str(account['account_number']) not in contributor_account_number_list:
-            if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
-                total_coins_supplied += int(account['balance'])
+        if str(account['account_number']) in contributor_account_number_list:
+            if str(account['account_number']) not in team_project_account_number_list:
+                if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
+                    total_coins_supplied += int(account['balance'])
 
-    print("Total coins with contributors that are not part of team: " + str(total_coins_supplied)+ " | " + \
+    print("Total coins with contributors that are not part of any team: " + str(total_coins_supplied)+ " | " + \
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
@@ -166,20 +166,23 @@ def normal_wallets():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = account_number_list('contributor') + account_number_list('team') + account_number_list('project')
-
+    contributor_account_number_list = account_number_list('team') + account_number_list('contributor') + account_number_list('project')
     for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
 
-    print("total coins in normal wallets: " + str(total_coins_supplied)+ " | " + \
+    print("Total coins in normal wallets: " + str(total_coins_supplied)+ " | " + \
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
-coins_supply()              # Returns the supply of the coin
-core_team()                 # Returns total balance of the core team of thenewboston
-project_team()              # Returns total balance of the project team members of thenewboston
-all_contributors()          # Returns total balance of the all the contributors of thenewboston
-contributors_not_in_team()  # Returns total balance of contributors that are not part of weekly payment in thenewboston
-normal_wallets()            # Returns the total amount of coins in the regular wallets
+
+print()
+print(f"Total coins in circulation: {global_coin_supply}")
+print("---------------------------")
+core_team()                 # total coins of the core team of thenewboston
+not_in_core_team()          # Returns total balance of the only the contributors of
+print("---------------------------")
+project_team()              # total coins of the project team members of thenewboston
+contributors_not_in_team()  # total coins of contributors that are not part of weekly payment in thenewboston
+normal_wallets()            # Total coins not in core, project or the contributor list
