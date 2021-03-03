@@ -1,0 +1,19 @@
+{
+  "name": "tnb-supply",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/mainScript.js",
+    "format": "node src/formatScript.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "neat-csv": "^6.0.1"
+  }
+}
