@@ -86,8 +86,11 @@ def account_number_list(team):
             if line_count == 0:
                 line_count += 1
             else:
-                if len(row[account_number_position]) == VERIFY_KEY_LENGTH:
-                    contributor_account_number_list.append(row[account_number_position])
+                try:
+                    if len(row[account_number_position]) == VERIFY_KEY_LENGTH:
+                        contributor_account_number_list.append(row[account_number_position])
+                except:
+                    pass
 
     return contributor_account_number_list
 
