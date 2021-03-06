@@ -215,7 +215,7 @@ def wallet_data():
 
     print(f"Total Accounts: {len(account_data_results)}")
     print(f"Accounts with more than 500,000 coins: {more_than_500000}")
-    print(f"Accounts between 500,000 - 400,000 coins: {more_than_400000}")
+    print(f"Accounts between 400,000 - 500,000 coins: {more_than_400000}")
     print(f"Accounts between 250,000 - 400,000 coins: {more_than_250000}")
     print(f"Accounts between 100,000 - 250,000 coins: {more_than_100000}")
     print(f"Accounts between 10,000 - 100,000 coins: {more_than_10000}")
