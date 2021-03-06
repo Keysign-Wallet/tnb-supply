@@ -4,7 +4,7 @@ import csv
 from thenewboston.constants.network import MAX_POINT_VALUE, VERIFY_KEY_LENGTH
 from thenewboston.utils.network import fetch
 
-PRIMARY_VALIDATOR_IP = '54.183.16.194'
+PRIMARY_VALIDATOR_IP = '54.241.124.162'
 
 ACCOUNTS_TO_SKIP = [
     "23676c35fce177aef2412e3ab12d22bf521ed423c6f55b8922c336500a1a27c5", # TREASURY (new)
@@ -69,16 +69,20 @@ def account_number_list(team):
         file_name = 'data_files/contributors.csv'
         account_number_position = 2
         team_url = 'https://raw.githubusercontent.com/thenewboston-developers/Payment-Processor/master/csvs/contributors.csv'
+    elif team == 'task':
+        file_name = 'data_files/tasks.csv'
+        team_url = 'https://raw.githubusercontent.com/tomijaga/tnb-supply/master/src/csvs/input/tasks.csv'
+        account_number_position = 7
     else:
         Exception("This is not good brruuhh")
     team_data = requests.get(team_url).text
 
     contributor_account_number_list = []
 
-    with open(file_name, 'w') as file:
+    with open(file_name, 'w', encoding='utf-8') as file:
         file.write(team_data)
 
-    with open(file_name, 'r') as file:
+    with open(file_name, 'r', encoding='utf-8') as file:
         reader = csv.reader(file)
 
         line_count = 0
@@ -169,7 +173,8 @@ def normal_wallets():
 
     total_coins_supplied = 0
 
-    contributor_account_number_list = account_number_list('team') + account_number_list('contributor') + account_number_list('project')
+    contributor_account_number_list = account_number_list('team') + account_number_list('contributor') \
+         + account_number_list('project')
     for account in account_data_results:
         if str(account['account_number']) not in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
@@ -179,6 +184,44 @@ def normal_wallets():
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
+def wallet_data():
+    more_than_zero = 0
+    more_than_1000 = 0
+    more_than_10000 = 0
+    more_than_100000 = 0
+    more_than_250000 = 0
+    more_than_400000 = 0
+    more_than_500000 = 0
+    no_balance = 0
+
+    for account in account_data_results:
+        if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
+            if int(account['balance']) > 500000:
+                more_than_500000 += 1
+            elif int(account['balance']) > 400000:
+                more_than_400000 += 1
+            elif int(account['balance']) > 250000:
+                more_than_250000 += 1
+            elif int(account['balance']) > 10000:
+                more_than_100000 += 1
+            elif int(account['balance']) > 10000:
+                more_than_10000 += 1
+            elif int(account['balance']) > 1000:
+                more_than_1000 += 1
+            elif int(account['balance']) > 0:
+                more_than_zero += 1
+            else:
+                no_balance += 1
+
+    print(f"Total Accounts: {len(account_data_results)}")
+    print(f"Accounts with more than 500,000 coins: {more_than_500000}")
+    print(f"Accounts between 500,000 - 400,000 coins: {more_than_400000}")
+    print(f"Accounts between 400,000 - 250,000 coins: {more_than_250000}")
+    print(f"Accounts between 250,000 - 100,000 coins: {more_than_100000}")
+    print(f"Accounts between 100,000 - 10,000 coins: {more_than_10000}")
+    print(f"Accounts between 10,000 - 1,000 coins: {more_than_1000}")
+    print(f"Accounts between 1,000 - 0 coins: {more_than_zero}")
+    print(f"Accounts with no coins: {no_balance}")
 
 print()
 print(f"Total coins in circulation: {global_coin_supply}")
@@ -189,3 +232,5 @@ print("---------------------------")
 project_team()              # total coins of the project team members of thenewboston
 contributors_not_in_team()  # total coins of contributors that are not part of weekly payment in thenewboston
 normal_wallets()            # Total coins not in core, project or the contributor list
+print("---------------------------")
+wallet_data()
