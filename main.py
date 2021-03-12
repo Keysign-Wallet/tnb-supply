@@ -7,6 +7,7 @@ from thenewboston.utils.network import fetch
 PRIMARY_VALIDATOR_IP = '54.241.124.162'
 
 ACCOUNTS_TO_SKIP = [
+    "0000000000000000000000000000000000000000000000000000000000000000", # Coin Burnt in this account
     "23676c35fce177aef2412e3ab12d22bf521ed423c6f55b8922c336500a1a27c5", # TREASURY (new)
     "6ad6deef2a65642a130fb081dacc2010c7521678986ed44b53a845bc00dd3924", # TREASURY
     "9bfa37627e2dba0ae48165b219e76ceaba036b3db8e84108af73a1cce01fad35", # TREASURY (old)
@@ -189,7 +190,8 @@ def wallet_data():
     more_than_1000 = 0
     more_than_10000 = 0
     more_than_100000 = 0
-    more_than_250000 = 0
+    more_than_200000 = 0
+    more_than_300000 = 0
     more_than_400000 = 0
     more_than_500000 = 0
     no_balance = 0
@@ -200,8 +202,10 @@ def wallet_data():
                 more_than_500000 += 1
             elif int(account['balance']) > 400000:
                 more_than_400000 += 1
-            elif int(account['balance']) > 250000:
-                more_than_250000 += 1
+            elif int(account['balance']) > 300000:
+                more_than_300000 += 1
+            elif int(account['balance']) > 200000:
+                more_than_200000 += 1
             elif int(account['balance']) > 10000:
                 more_than_100000 += 1
             elif int(account['balance']) > 10000:
@@ -216,8 +220,9 @@ def wallet_data():
     print(f"Total Accounts: {len(account_data_results)}")
     print(f"Accounts with more than 500,000 coins: {more_than_500000}")
     print(f"Accounts between 400,000 - 500,000 coins: {more_than_400000}")
-    print(f"Accounts between 250,000 - 400,000 coins: {more_than_250000}")
-    print(f"Accounts between 100,000 - 250,000 coins: {more_than_100000}")
+    print(f"Accounts between 300,000 - 400,000 coins: {more_than_300000}")
+    print(f"Accounts between 200,000 - 300,000 coins: {more_than_200000}")
+    print(f"Accounts between 100,000 - 200,000 coins: {more_than_100000}")
     print(f"Accounts between 10,000 - 100,000 coins: {more_than_10000}")
     print(f"Accounts between 1,000 10,000 coins: {more_than_1000}")
     print(f"Accounts between 0 - 1,000 coins: {more_than_zero}")
