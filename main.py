@@ -200,19 +200,19 @@ def wallet_data():
         if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
             if int(account['balance']) > 500000:
                 more_than_500000 += 1
-            elif int(account['balance']) > 400000:
+            elif int(account['balance']) > 400000 and int(account['balance']) < 500000:
                 more_than_400000 += 1
-            elif int(account['balance']) > 300000:
+            elif int(account['balance']) > 300000 and int(account['balance']) < 400000:
                 more_than_300000 += 1
-            elif int(account['balance']) > 200000:
+            elif int(account['balance']) > 200000 and int(account['balance']) < 300000:
                 more_than_200000 += 1
-            elif int(account['balance']) > 10000:
+            elif int(account['balance']) > 100000 and int(account['balance']) < 200000:
                 more_than_100000 += 1
-            elif int(account['balance']) > 10000:
+            elif int(account['balance']) > 10000 and int(account['balance']) < 100000:
                 more_than_10000 += 1
-            elif int(account['balance']) > 1000:
+            elif int(account['balance']) > 1000 and int(account['balance']) < 10000:
                 more_than_1000 += 1
-            elif int(account['balance']) > 0:
+            elif int(account['balance']) > 0 and int(account['balance']) < 1000:
                 more_than_zero += 1
             else:
                 no_balance += 1
@@ -224,7 +224,7 @@ def wallet_data():
     print(f"Accounts between 200,000 - 300,000 coins: {more_than_200000}")
     print(f"Accounts between 100,000 - 200,000 coins: {more_than_100000}")
     print(f"Accounts between 10,000 - 100,000 coins: {more_than_10000}")
-    print(f"Accounts between 1,000 10,000 coins: {more_than_1000}")
+    print(f"Accounts between 1,000 - 10,000 coins: {more_than_1000}")
     print(f"Accounts between 0 - 1,000 coins: {more_than_zero}")
     print(f"Accounts with no coins: {no_balance}")
 
