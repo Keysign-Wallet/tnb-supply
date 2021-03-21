@@ -8,6 +8,7 @@ PRIMARY_VALIDATOR_IP = '54.241.124.162'
 
 ACCOUNTS_TO_SKIP = [
     "0000000000000000000000000000000000000000000000000000000000000000", # Coin Burnt in this account
+    "7658a980ecc4458bad84be5bb239968cf7be96fa18a1197bef3d62f9b93e5410", # Faucet wallet (new)
     "23676c35fce177aef2412e3ab12d22bf521ed423c6f55b8922c336500a1a27c5", # TREASURY (new)
     "6ad6deef2a65642a130fb081dacc2010c7521678986ed44b53a845bc00dd3924", # TREASURY
     "9bfa37627e2dba0ae48165b219e76ceaba036b3db8e84108af73a1cce01fad35", # TREASURY (old)
@@ -100,7 +101,7 @@ def account_number_list(team):
     return contributor_account_number_list
 
 
-# Returns total balance of the core team of thenewboston 
+# Returns total balance of the core team of thenewboston
 def core_team():
 
     total_coins_supplied = 0
@@ -116,7 +117,7 @@ def core_team():
      str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
 
-# Returns total balance of the project team members of thenewboston 
+# Returns total balance of the project team members of thenewboston
 def project_team():
 
     total_coins_supplied = 0
@@ -127,7 +128,7 @@ def project_team():
         if str(account['account_number']) in contributor_account_number_list:
             if str(account['account_number']) not in ACCOUNTS_TO_SKIP:
                 total_coins_supplied += int(account['balance'])
-        
+
     print("Total coins with project teams: " + str(total_coins_supplied) + " | " + \
     str(int(total_coins_supplied/global_coin_supply*10000)/100) + "% of total supply")
     return total_coins_supplied
@@ -149,7 +150,7 @@ def not_in_core_team():
     return total_coins_supplied
 
 
-# Returns total balance of contributors that are not part of weekly payment in thenewboston 
+# Returns total balance of contributors that are not part of weekly payment in thenewboston
 def contributors_not_in_team():
 
     total_coins_supplied = 0
