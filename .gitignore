@@ -36,3 +36,6 @@ env/
 venv
 venv.bak/
 venv/
+
+# Data files
+/data_files
