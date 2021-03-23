@@ -38,4 +38,6 @@ venv.bak/
 venv/
 
 # Data files
-/data_files
+.teams.csv
+.contributors.csv
+.project-teams.csv
