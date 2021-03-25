@@ -1,10 +1,9 @@
 import requests
 import csv
 
-from thenewboston.constants.network import MAX_POINT_VALUE, VERIFY_KEY_LENGTH
-from thenewboston.utils.network import fetch
-
 PRIMARY_VALIDATOR_IP = '54.241.124.162'
+MAX_POINT_VALUE = 281474976710656
+VERIFY_KEY_LENGTH = 64
 
 ACCOUNTS_TO_SKIP = [
     "0000000000000000000000000000000000000000000000000000000000000000", # Coin Burnt in this account
@@ -22,6 +21,24 @@ ACCOUNTS_TO_SKIP = [
     "0c9e43fd6630e213a088bf816425c294248ae496129dadb03137c151a2a22ff6", # Held lot of value in past, now has 0
     "67077b2397f99fb6c63185af25cdf49d43736b22b7ea5dd68089a04cd4dbf8cf"  # Held lot of value in past, now has 0
 ]
+
+# imported from thenewboston-python repo
+def validate_response(response):
+    """
+    Validate status code
+    Return response as Python object
+    """
+    if response.status_code >= 400:
+        err = f'status_code:{response.status_code} - {response.text}'
+        raise NetworkException(err)
+
+    return response.json()
+
+# imported from thenewboston-python repo
+def fetch(*, url, headers):
+    """Send a GET request and return response as Python object"""
+    response = requests.get(url, headers=headers)
+    return validate_response(response)
 
 def fetch_account_data():
     """
