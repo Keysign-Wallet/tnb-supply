@@ -1,4 +1,6 @@
-### Currently a 10,000 TNBC bounty going on:
-https://docs.google.com/document/d/1jowGzdUip5xJUlYMTjAZxGZX1EZlIKgBcVtVPvkF_V8/edit?usp=sharing
+#### This will generate a close as possible report for who has how many tokens.
 
 Run the application: python main.py
+
+### How to use this analysis
+Install all dependencies by `pip install -r requirements.txt`
